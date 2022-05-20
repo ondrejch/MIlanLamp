@@ -9,8 +9,9 @@
 const char *my_tz    = "EST5EDT,M3.2.0,M11.1.0";
 const char *ntp_srv  = "pool.ntp.org";
 
-const char *ssid     = "SSID";
-const char *password = "PASSWORD";
+//const char *ssid     = "SSID";
+//const char *password = "PASSWORD";
+#include "wificreds.h"		   // keping real wifi credentials outside repository
 
 /* Time */
 time_t now;                         // this is the epoch
@@ -51,7 +52,7 @@ void setLights() {
       RGB(32,178,170);
     }
   }
-  if (tm.tm_hour == 8) {
+  if (tm.tm_hour >= 8 and tm.tm_hour <= 18) {
     RGB(0,0,0);
   }
   // BEEP at 7am
@@ -62,6 +63,12 @@ void setLights() {
     } 
   }
   // NIGHT
+  if (tm.tm_hour == 18) {
+    RGB(2*tm.tm_min, 139+tm.tm_min, 2*tm.tm_min);
+  }
+  if (tm.tm_hour == 19 and tm.tm_min < 20) {
+    RGB(34,139,34);
+  }
   if (tm.tm_hour == 19 and tm.tm_min >= 20 and tm.tm_min <= 30) {
     RGB(178,34,34);    
   }
@@ -69,9 +76,9 @@ void setLights() {
     RGB(255,140 - (tm.tm_min-30),0);    
   }
   if (tm.tm_hour == 20) {
-    RGB(255-tm.tm_min,110-tm.tm_min,0);
+    RGB(255-tm.tm_min+30, 60-2*tm.tm_min,0);
   }
-  if (tm.tm_hour == 21) {
+  if (tm.tm_hour >= 20 and tm.tm_min >= 31) {
     RGB(0,0,0);
   }
 }
@@ -132,4 +139,3 @@ void loop() {
   setLights();
   delay(1000);
 }
-
