@@ -1,5 +1,6 @@
 /*  Code for ESP8266 controller to run Smart Table Lamp and a buzzer
     Ondrej Chvala, ondrejch@gmail.com
+    May 2022
     MIT license
 */
 #include <ESP8266WiFi.h>
@@ -37,7 +38,13 @@ void RGB(int red_value, int green_value, int blue_value) {
 void setLights() {
   time(&now);                       // read the current time
   localtime_r(&now, &tm);           // update the structure tm with the current time
+  if (tm.tm_year + 1900 < 2022) {   // wait until time sets
+    return;
+  }
   // MORNING
+  if (tm.tm_hour <= 6) {
+    RGB(0,0,0);
+  }
   if (tm.tm_hour == 6 and tm.tm_min == 0) {
     RGB(135,206,250);
   }
@@ -46,7 +53,7 @@ void setLights() {
   }
   if (tm.tm_hour == 7 and (tm.tm_min >=30 or tm.tm_min<60)) {
     if (tm.tm_sec % 4 < 2) {
-      Serial.println(tm.tm_sec % 5);
+//      Serial.println(tm.tm_sec % 5);
       RGB(255, 165, 0);    
     } else {
       RGB(32,178,170);
@@ -124,9 +131,9 @@ void setup(){
   RGB(0,0,0);
   
   WiFi.begin(ssid, password);
-  while ( WiFi.status() != WL_CONNECTED ) {
-    delay ( 500 );
-    Serial.print ( "." );
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
   }
   Serial.print("Connected, IP address: ");
   Serial.println(WiFi.localIP());
