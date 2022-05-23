@@ -59,7 +59,7 @@ void setLights() {
       RGB(32,178,170);
     }
   }
-  if (tm.tm_hour >= 8 and tm.tm_hour <= 18) {
+  if (tm.tm_hour >= 8 and tm.tm_hour < 18) {
     RGB(0,0,0);
   }
   // BEEP at 7am
