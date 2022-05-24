@@ -41,53 +41,56 @@ void setLights() {
   if (tm.tm_year + 1900 < 2022) {   // wait until time sets
     return;
   }
+
+  int r = 0, g = 0, b = 0;          // stores RGB values
   // MORNING
   if (tm.tm_hour <= 6) {
-    RGB(0,0,0);
+    r = 0; g = 0; b = 0;
   }
   if (tm.tm_hour == 6 and tm.tm_min == 0) {
-    RGB(135,206,250);
+    r = 135; g = 206; b = 250;
   }
   if (tm.tm_hour == 6 and tm.tm_min > 0) {
-    RGB(255, 155+tm.tm_min, 0);    
+    r = 255; g = 155+tm.tm_min; b= 0;
   }
   if (tm.tm_hour == 7 and (tm.tm_min >=30 or tm.tm_min<60)) {
     if (tm.tm_sec % 4 < 2) {
 //      Serial.println(tm.tm_sec % 5);
-      RGB(255, 165, 0);    
+      r = 255; g = 165; b = 0;
     } else {
-      RGB(32,178,170);
+      r =  32; g = 178; b = 170;
     }
   }
   if (tm.tm_hour >= 8 and tm.tm_hour < 18) {
-    RGB(0,0,0);
+    r = 0; g = 0; b = 0;
   }
   // BEEP at 7am
   analogWrite(pin_beep, 0);
   if (tm.tm_hour == 7 and tm.tm_min <1) {
     if (tm.tm_sec % 2 == 0) {
       analogWrite(pin_beep, 250);
-    } 
+    }
   }
   // NIGHT
   if (tm.tm_hour == 18) {
-    RGB(2*tm.tm_min, 139+tm.tm_min, 2*tm.tm_min);
+    r = 2*tm.tm_min; g = 139+tm.tm_min; b = 2*tm.tm_min;
   }
   if (tm.tm_hour == 19 and tm.tm_min < 20) {
-    RGB(34,139,34);
+    r = 34; g = 139; b = 34;
   }
   if (tm.tm_hour == 19 and tm.tm_min >= 20 and tm.tm_min <= 30) {
-    RGB(178,34,34);    
+    r = 178; g = 34;  b = 34;
   }
   if (tm.tm_hour == 19 and tm.tm_min >= 30) {
-    RGB(255,140 - (tm.tm_min-30),0);    
+    r = 255; g = 140 - (tm.tm_min-30); b = 0;
   }
   if (tm.tm_hour == 20) {
-    RGB(255-tm.tm_min+30, 60-2*tm.tm_min,0);
+    r = 255-tm.tm_min+30; g = 60-2*tm.tm_min; b = 0;
   }
   if (tm.tm_hour >= 20 and tm.tm_min >= 31) {
-    RGB(0,0,0);
+    r = 0; g = 0; b = 0;
   }
+  RGB(r, g, b);
 }
 
 void showTime2() {
@@ -129,7 +132,7 @@ void setup(){
   pinMode(pin_ledB, OUTPUT);
   pinMode(pin_beep, OUTPUT);
   RGB(0,0,0);
-  
+
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -138,7 +141,7 @@ void setup(){
   Serial.print("Connected, IP address: ");
   Serial.println(WiFi.localIP());
 
-  configTime(my_tz, ntp_srv); 
+  configTime(my_tz, ntp_srv);
 }
 
 void loop() {
