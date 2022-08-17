@@ -53,7 +53,8 @@ void setLights() {
   if (tm.tm_hour == 6 and tm.tm_min > 0) {
     r = 255; g = 155+tm.tm_min; b= 0;
   }
-  if (tm.tm_hour == 7 and (tm.tm_min >=30 or tm.tm_min<60)) {
+  if ( (tm.tm_hour == 6 and tm.tm_min >= 50) or
+       (tm.tm_hour == 7 and tm.tm_min <= 10) ) {
     if (tm.tm_sec % 4 < 2) {
 //      Serial.println(tm.tm_sec % 5);
       r = 255; g = 165; b = 0;
@@ -61,12 +62,16 @@ void setLights() {
       r =  32; g = 178; b = 170;
     }
   }
+  if (tm.tm_hour == 7 and tm.tm_min  > 10) {
+     r = 178; g = 178; b = 178;
+  }
   if (tm.tm_hour >= 8 and tm.tm_hour < 18) {
     r = 0; g = 0; b = 0;
   }
-  // BEEP at 7am
+  // BEEP at 6:50am
   analogWrite(pin_beep, 0);
-  if (tm.tm_hour == 7 and tm.tm_min <1) {
+  if ( (tm.tm_hour == 7 and tm.tm_min <  1) or  
+       (tm.tm_hour == 6 and tm.tm_min >=50) ) {
     if (tm.tm_sec % 2 == 0) {
       analogWrite(pin_beep, 250);
     }
